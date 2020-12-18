@@ -8,7 +8,7 @@ import java.util.TreeSet;
 public class Multiples_of_3_n_5 {
 
 	public static void main(String[] args) {
-		int LIMIT = 20;
+		int LIMIT = 50;
 		// int sum = 0;
  
 		prime_number_fider.fider(LIMIT); // find prime numbers up to LIMIT
@@ -86,23 +86,25 @@ class MultipleFider{
 		int num_multiple = 1; // num will be a multiple 
 		int i = 0; // i will be the indices
 		
+		
+		p_set_for_next = p_set;
 		// 가장 작은 소수 p를 추출하고, n과 p의 거듭제곱을 num_multiple에 저장한다. 이 num_multiple은 Result_set에 저장된다.
 		if(iter_prime_num.hasNext()) { // It provides elements in the same order I had inserted in.
 			p = iter_prime_num.next(); // p is the smallest prime number in the prime set. 2
 			System.out.println("p = "+p); // 2
 			while(num_multiple < LIMIT) {
 				num_multiple = (n*((int)(Math.pow(p,i)))); //  3*(2^0), 3*(2^1), 3*(2^2), ...
-				System.out.println("n = "+n + "/  i = "+i +" /  num_multiple = "+num_multiple);
+				System.out.println("n = "+n +"/  p = "+p+ "/  i = "+i  +" =>=> "+num_multiple);
 	
 				if(num_multiple < LIMIT) {
 					Result_Set.add(num_multiple); // 1. "Result_Set" = {3, 6, 12, 24, ...} // 2. "Result_Set" = {3, 9, 27, 81, ...}
-					System.out.println("num_multiple = "+num_multiple);
+					System.out.println("num_multiple = "+num_multiple + " was added");
 				}
 					
 				i++;
 			}
 
-			p_set.remove(p); // Used prime number is eliminated from the prime number set. 아래의 while문을 이걸로 교체할 수 있다.
+			p_set_for_next.remove(p); // Used prime number is eliminated from the prime number set. 아래의 while문을 이걸로 교체할 수 있다.
 			System.out.println("the new prime set has made.");
 			/*
 			while(iter_prime_num.hasNext()) { // To convert Iterator to LinkedHashSet
@@ -124,18 +126,30 @@ class MultipleFider{
 				n = temp; // n is the new original number. 	
 			*/	
 			n = temp_natural_num;
-			System.out.println("temp_nat = "+temp_natural_num); // 여기에 왜 6이 들어가지?? 3이 한번 더 나와줘야 하는데...
-			
-			if(Result_Set.size() == 1) // Get lid of meaningless iterations
+			System.out.println("-------------------start------------------\nThe input of new method: n = "+temp_natural_num);
+			Iterator<Integer> new_p_iter = p_set_for_next.iterator();
+			int k = 1;
+			while(new_p_iter.hasNext()) {
+				System.out.println("The new prime number "+k+" : "+new_p_iter.next());
+				k++;
+			}
+			System.out.println("-------------------end!!--------------------");
+			/*if(Result_Set.size() == 1) // Get lid of meaningless iterations
 			{
 				System.out.println("Break!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				break; // go to return
 			}
+			*/
+			
+			
 			
 			Result_Set.addAll(MultipleFider.Multiplier(n, p_set_for_next, LIMIT)); // n = 3, "p_set_for_next" = {3, 5, 7, 11, ...}, LIMIT = 1000
-			// How to convert Iterator -> LinkedHashSet ??
+
 		}
-	
+		System.out.println("\nReturning result: ");
+		Iterator<Integer> Result_temp = Result_Set.iterator();
+		while(Result_temp.hasNext())
+			System.out.println(Result_temp.next());
 		return Result_Set;
 	}
 	
