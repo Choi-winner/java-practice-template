@@ -10,7 +10,7 @@ public class Multiples_of_3_n_5 {
 enum STATUS { INITIALIZE, END, STEP1, STEP2, STEP3;	}
 
 	public static void main(String[] args) {
-		int LIMIT = 50;
+		int LIMIT = 1000;
 		int sum = 0;
 
 		prime_number_fider.fider(LIMIT); // find prime numbers up to LIMIT
@@ -97,11 +97,9 @@ class MultipleFider {
 						break; // break the 'for' loop.
 				} 
 				MultiplesOf_n.addAll(MultiplesOf_n_by2);
-				System.out.println("INITIALIZE complete --------- the current multiple: "+MultiplesOf_n);
 				status = STATUS.STEP1;
 				break;
 			case STEP1:
-				System.out.println("Welcome to STEP1------ cont: "+cont);
 				int p = prime_set1.first(); // The next smallest element, 3 will be entered in 'p'. 
 				prime_set1.remove(p);
 				TreeSet<Integer> Temp_set = new TreeSet<Integer>();
@@ -112,11 +110,9 @@ class MultipleFider {
 					
 					for(int i = 0; ; i++) {
 						int result = n*(int)(Math.pow(p, i));
-						System.out.println("n = "+n + " / p = "+ p + " / i = "+i+" result is "+result);
 						if(result < LIMIT)
 							Temp_set.add(result);
 						else {
-							System.out.println("break the for loop");
 							break; // If the result should exceed LIMIT, it may break the for loop.
 						}
 					} // for end		
@@ -124,26 +120,19 @@ class MultipleFider {
 				
 				MultiplesOf_n.addAll(Temp_set); // In the iteration, the Temporal_treeset helps to remove the error.
 				status = STATUS.STEP2;
-				System.out.println("STEP1 copmlete-------- "+MultiplesOf_n);
 				break;
 			case STEP2: // Preparing some settings to implement another STEP1.
-				System.out.println("Welcome to STEP2----- the current prime set is "+prime_set1);
 				if(prime_set1.size() == 0) // The prime set is sold out.
 					status = STATUS.END;
 				else
 					status = STATUS.STEP1;
-				System.out.println("Step2 complete-------- remainning prime set size: "+prime_set1.size()+" / the STATUS : "+status+" / cont: "+cont);
 				break;
 			
-			case STEP3:
-				System.out.println("Why you are here? It's STEP3!");
-				break;
 			case END:
 				cont = 0; // escape while loop.
-				System.out.println("End! The result multiples are : "+MultiplesOf_n);
+				System.out.println("End! The result multiples of "+initial_num+" : "+MultiplesOf_n);
 				break;	
 			default:
-				System.out.println("default occured / cont : "+cont);
 				cont = 0;
 				break;
 			} // switch end
