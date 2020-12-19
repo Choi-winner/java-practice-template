@@ -11,119 +11,42 @@ enum STATUS { INITIALIZE, END, STEP1, STEP2, STEP3;	}
 
 	public static void main(String[] args) {
 		int LIMIT = 50;
-		// int sum = 0;
+		int sum = 0;
 
 		prime_number_fider.fider(LIMIT); // find prime numbers up to LIMIT
 
 		TreeSet<Integer> prime_set = new TreeSet<Integer>();
+
 		prime_set = prime_number_fider.prime_numbers_set;
-		for (int a : prime_set) { // experiment for prime numbers
-			System.out.println(a);
-		} // Prime numbers were made perfectly.
+		System.out.println("The prime set under the LIMIT("+LIMIT+") : "+prime_set);
+		// Prime numbers were made perfectly.
 		
+		// The 'prime_set' should be copied.
+		TreeSet<Integer> prime_set_for3 = new TreeSet<Integer>();
+		prime_set_for3.addAll(prime_set);
+		TreeSet<Integer> prime_set_for5 = new TreeSet<Integer>();
+		prime_set_for5.addAll(prime_set);
 		
-		TreeSet<Integer> MultiplesOf_3_by2 = new TreeSet<Integer>();
-		TreeSet<Integer> MultiplesOf_3 = new TreeSet<Integer>();
-		STATUS status = STATUS.INITIALIZE;
-		int cont = 1;
-		while(cont == 1) {
-			switch (status) {
-			case INITIALIZE: // Make a set of multiples of '2', the smallest prime number.
-				int p_init = prime_set.first(); // The smallest prime number, 2 will be entered in 'p_init'.
-				prime_set.remove(p_init); // remove 2.
-				int multiple;
-				
-				for(int i = 0; i < LIMIT ; i++) {
-					multiple = 3*((int)(Math.pow(p_init, i)));
-					if(multiple < LIMIT)
-						MultiplesOf_3_by2.add(multiple);
-					else
-						break; // break the 'for' loop.
-				} // MultiplesOf_3_by2 = {3, 6, 12, 24, ...} 
-				MultiplesOf_3.addAll(MultiplesOf_3_by2);
-				System.out.println("INITIALIZE complete --------- the current multiple: "+MultiplesOf_3);
-				status = STATUS.STEP1;
-				break;
-			case STEP1:
-				System.out.println("Welcome to STEP1------ cont: "+cont);
-				int p = prime_set.first(); // The next smallest element, 3 will be entered in 'p'. 
-				prime_set.remove(p);
-				TreeSet<Integer> Temp_set = new TreeSet<Integer>();
-				Iterator<Integer> Iter_multiples = MultiplesOf_3.iterator();
-				while(Iter_multiples.hasNext()) { // {3, 6, 12, 24, ...} 가 하나씩 나온다.
-					int n;
-					n = Iter_multiples.next();
-					
-					for(int i = 0; ; i++) {
-						int result = n*(int)(Math.pow(p, i));
-						System.out.println("n = "+n + " / p = "+ p + " / i = "+i+" result is "+result);
-						if(result < LIMIT)
-							Temp_set.add(result);
-						else {
-							System.out.println("break the for loop");
-							break; // If the result should exceed LIMIT, it may break the for loop.
-						}
-					} // for end		
-				} // while end
-				
-				MultiplesOf_3.addAll(Temp_set); // In the iteration, the Temporal_treeset helps to remove the error.
-				status = STATUS.STEP2;
-				System.out.println("STEP1 copmlete-------- "+MultiplesOf_3);
-				break;
-			case STEP2: // Preparing some settings to implement another STEP1.
-				System.out.println("Welcome to STEP2----- the current prime set is "+prime_set);
-				if(prime_set.size() == 0) // The prime set is sold out.
-					status = STATUS.END;
-				else
-					status = STATUS.STEP1;
-				System.out.println("Step2 complete-------- remainning prime set size: "+prime_set.size()+" / the STATUS : "+status+" / cont: "+cont);
-				break;
-			
-			case STEP3:
-				System.out.println("Why you are here? It's STEP3!");
-				break;
-			case END:
-				cont = 0; // escape while loop.
-				System.out.println("End! The result multiples are : "+MultiplesOf_3);
-				break;	
-			default:
-				System.out.println("default occured / cont : "+cont);
-				cont = 0;
-				break;
-			
-			} // switch end
+		// The I/O of static method 'MultipleFider.fider'
+		// 1. Input: initial_number(3 or 5) , set of prime numbers , LIMIT
+		// 2. Ouput: MultiplesOf_3 is the ouput.
+		
+		TreeSet<Integer> MultiplesOf_3 = new TreeSet<Integer>(); // 'MultiplesOf_3' is the 
+		MultiplesOf_3 = MultipleFider.finder(3, prime_set_for3, LIMIT);
 
+		TreeSet<Integer> MultiplesOf_5 = new TreeSet<Integer>();
+		MultiplesOf_5 = MultipleFider.finder(5, prime_set_for5, LIMIT);
+	
+		TreeSet<Integer> MultiplesOf_3n5 = new TreeSet<Integer>();
+		MultiplesOf_3n5.addAll(MultiplesOf_3);
+		MultiplesOf_3n5.addAll(MultiplesOf_5);
+		System.out.println("\n\nThe result set: "+MultiplesOf_3n5);
 		
-		} // while end
-
-		
-		
-		
-		
-		
-		
-		
-		
-
-		// static class in which 3 and 5 are multiplied by prime numbers
-		//TreeSet<Integer> MultiplesOf_3 = new TreeSet<Integer>();
-		//MultiplesOf_3 = MultipleFider.Multiplier(3, prime_set, LIMIT); // Multiples of 3
-		// LinkedHashSet<Integer> MultiplesOf_5 = new LinkedHashSet<Integer>();
-		// MultiplesOf_3 = MultipleFider.Multiplier(5, prime_set, LIMIT); // Multiples
-		// of 5
-
-		// LinkedHashSet<Integer> MultiplesOf_3_n_5 = new LinkedHashSet<Integer>();
-		// MultiplesOf_3_n_5.addAll(MultiplesOf_3);
-		// MultiplesOf_3_n_5.addAll(MultiplesOf_5);
-
-		//Iterator<Integer> iter_Mul_Of_3 = MultiplesOf_3.iterator();
-		//System.out.println("the multiples are: ");
-		//while (iter_Mul_Of_3.hasNext()) {
-		//	System.out.println(iter_Mul_Of_3.next());
-
-		//}
-
-		// sum all the elements in MultiplesOf_3_n_5
+		Iterator<Integer> iter_for_sum = MultiplesOf_3n5.iterator();
+		while(iter_for_sum.hasNext()) {
+			sum += iter_for_sum.next();
+		}
+		System.out.println("\nThe sum of all multiples of 3 and 5 is "+sum);
 
 	} // main end
 
@@ -149,124 +72,85 @@ class prime_number_fider {
 }
 
 
+// The spec of static method 'MultipleFider.fider'
+// 1. Input: initial_number(3 or 5) , set of prime numbers , LIMIT
+// 2. Ouput: 'MultiplesOf_n' is the ouput.
+class MultipleFider {
+	enum STATUS { INITIALIZE, END, STEP1, STEP2, STEP3;	}
+	 static TreeSet<Integer> finder(int initial_num, TreeSet<Integer> prime_set1, int LIMIT) {
+		TreeSet<Integer> MultiplesOf_n_by2 = new TreeSet<Integer>(); // 'n' is the initial number, 3 or 5.
+		TreeSet<Integer> MultiplesOf_n = new TreeSet<Integer>();
+		STATUS status = STATUS.INITIALIZE;
+		int cont = 1;
+		while(cont == 1) {
+			switch (status) {
+			case INITIALIZE: // Make a set of multiples of '2', the smallest prime number.
+				int p_init = prime_set1.first(); // The smallest prime number, 2 will be entered in 'p_init'.
+				prime_set1.remove(p_init); // remove 2.
+				int multiple;
+				
+				for(int i = 0; i < LIMIT ; i++) {
+					multiple = initial_num*((int)(Math.pow(p_init, i)));
+					if(multiple < LIMIT)
+						MultiplesOf_n_by2.add(multiple);
+					else
+						break; // break the 'for' loop.
+				} 
+				MultiplesOf_n.addAll(MultiplesOf_n_by2);
+				System.out.println("INITIALIZE complete --------- the current multiple: "+MultiplesOf_n);
+				status = STATUS.STEP1;
+				break;
+			case STEP1:
+				System.out.println("Welcome to STEP1------ cont: "+cont);
+				int p = prime_set1.first(); // The next smallest element, 3 will be entered in 'p'. 
+				prime_set1.remove(p);
+				TreeSet<Integer> Temp_set = new TreeSet<Integer>();
+				Iterator<Integer> Iter_multiples = MultiplesOf_n.iterator();
+				while(Iter_multiples.hasNext()) { // {3, 6, 12, 24, ...} 가 하나씩 나온다.
+					int n;
+					n = Iter_multiples.next();
+					
+					for(int i = 0; ; i++) {
+						int result = n*(int)(Math.pow(p, i));
+						System.out.println("n = "+n + " / p = "+ p + " / i = "+i+" result is "+result);
+						if(result < LIMIT)
+							Temp_set.add(result);
+						else {
+							System.out.println("break the for loop");
+							break; // If the result should exceed LIMIT, it may break the for loop.
+						}
+					} // for end		
+				} // while end
+				
+				MultiplesOf_n.addAll(Temp_set); // In the iteration, the Temporal_treeset helps to remove the error.
+				status = STATUS.STEP2;
+				System.out.println("STEP1 copmlete-------- "+MultiplesOf_n);
+				break;
+			case STEP2: // Preparing some settings to implement another STEP1.
+				System.out.println("Welcome to STEP2----- the current prime set is "+prime_set1);
+				if(prime_set1.size() == 0) // The prime set is sold out.
+					status = STATUS.END;
+				else
+					status = STATUS.STEP1;
+				System.out.println("Step2 complete-------- remainning prime set size: "+prime_set1.size()+" / the STATUS : "+status+" / cont: "+cont);
+				break;
+			
+			case STEP3:
+				System.out.println("Why you are here? It's STEP3!");
+				break;
+			case END:
+				cont = 0; // escape while loop.
+				System.out.println("End! The result multiples are : "+MultiplesOf_n);
+				break;	
+			default:
+				System.out.println("default occured / cont : "+cont);
+				cont = 0;
+				break;
+			} // switch end
+		} // while end
+		return MultiplesOf_n;
+	} // method end
+}
 
-
-/*
- * Idea for finding multiples from a natural number by multiplying prime numbers
- * 1. "class MultipleFider" will use only one prime number 'p' in the set in
- * each iteration. 2. In each iteration, it returns a set of multiples of a 'n'
- * and powers of 'p'. 3. Each element of result set of previous step will be the
- * new 'n' in next iteration. 4. The next smallest prime number of prime set
- * will be the new 'p' in next iteration.
- */
-/*
- * class MultipleFider { int START = 1; int END = 6; int STATUS = START;
- * 
- * switch (STATUS) {
- * 
- * 
- * 
- * 
- * }
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * }
- */
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	/*
-	 * int n = 0; // the original number for find multiples int p = 0; // the one
-	 * prime number from a set of prime number // Actually 'p' is the smallest prime
-	 * number in the prime set. static TreeSet<Integer> Multiplier(int n,
-	 * TreeSet<Integer> p_set, int LIMIT) { TreeSet<Integer> Result_Set = new
-	 * TreeSet<Integer>(); // multiples are in the result set. TreeSet<Integer>
-	 * p_set_for_next = new TreeSet<Integer>(); // p_set_for_next is the temporal
-	 * prime set for Iterator<Integer> iter_prime_num = p_set.iterator(); // We need
-	 * to extract smallest 'p's 1 by 1 int p = 1; int num_multiple = 1; // num will
-	 * be a multiple int i = 0; // i will be the indices
-	 * 
-	 * 
-	 * p_set_for_next = p_set; // 가장 작은 소수 p를 추출하고, n과 p의 거듭제곱을 num_multiple에 저장한다.
-	 * 이 num_multiple은 Result_set에 저장된다. if(iter_prime_num.hasNext()) { // It
-	 * provides elements in the same order I had inserted in. p =
-	 * iter_prime_num.next(); // p is the smallest prime number in the prime set. 2
-	 * System.out.println("p = "+p); // 2 while(num_multiple < LIMIT) { num_multiple
-	 * = (n*((int)(Math.pow(p,i)))); // 3*(2^0), 3*(2^1), 3*(2^2), ...
-	 * System.out.println("n = "+n +"/  p = "+p+ "/  i = "+i
-	 * +" =>=> "+num_multiple);
-	 * 
-	 * if(num_multiple < LIMIT) { Result_Set.add(num_multiple); // 1. "Result_Set" =
-	 * {3, 6, 12, 24, ...} // 2. "Result_Set" = {3, 9, 27, 81, ...}
-	 * System.out.println("num_multiple = "+num_multiple + " was added"); }
-	 * 
-	 * i++; }
-	 * 
-	 * p_set_for_next.remove(p); // Used prime number is eliminated from the prime
-	 * number set. 아래의 while문을 이걸로 교체할 수 있다.
-	 * System.out.println("the new prime set has made.");
-	 * 
-	 * while(iter_prime_num.hasNext()) { // To convert Iterator to LinkedHashSet int
-	 * temp_p = iter_prime_num.next(); p_set_for_next.add(temp_p); // The
-	 * "p_set_for_next" has lost the smallest prime number.
-	 * System.out.println("temp_p = "+temp_p); } // "p_set_for_next" = {3, 5, 7, 11,
-	 * ...} <- 2 was eliminated
-	 * 
-	 * 
-	 * 
-	 * }
-	 * 
-	 * Iterator<Integer> iter_natural_num = Result_Set.iterator();
-	 * while(iter_natural_num.hasNext()) { // iter_natural_num의 다음 원소가 없을 때까지 계속 내부
-	 * 구문 실행. int temp_natural_num = iter_natural_num.next(); if(n == temp) // If
-	 * the 'temp' is same as 'n', the iteration will not end. <- it was an error.
-	 * continue; else n = temp; // n is the new original number.
-	 * 
-	 * n = temp_natural_num; System.out.
-	 * println("-------------------start------------------\nThe input of new method: n = "
-	 * +temp_natural_num); Iterator<Integer> new_p_iter = p_set_for_next.iterator();
-	 * int k = 1; while(new_p_iter.hasNext()) {
-	 * System.out.println("The new prime number "+k+" : "+new_p_iter.next()); k++; }
-	 * System.out.println("-------------------end!!--------------------");
-	 * if(Result_Set.size() == 1) // Get lid of meaningless iterations {
-	 * System.out.println(
-	 * "Break!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"); break;
-	 * // go to return }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * Result_Set.addAll(MultipleFider.Multiplier(n, p_set_for_next, LIMIT)); // n =
-	 * 3, "p_set_for_next" = {3, 5, 7, 11, ...}, LIMIT = 1000
-	 * 
-	 * } System.out.println("\nReturning result: "); Iterator<Integer> Result_temp =
-	 * Result_Set.iterator(); while(Result_temp.hasNext())
-	 * System.out.println(Result_temp.next()); return Result_Set; }
-	 */
 
 
